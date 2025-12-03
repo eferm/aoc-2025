@@ -25,7 +25,19 @@ function part1(input: string) {
 }
 
 function part2(input: string) {
-  return 0;
+  return input
+    .split(",")
+    .map((range) => range.split("-").map(Number) as [number, number])
+    .flatMap(([first, last]) => {
+      return Array.from({ length: last - first + 1 }, (_, i) => first + i);
+    })
+    .filter((i) => {
+      const text = String(i);
+      return Array.from({ length: text.length / 2 }, (_, i) => 1 + i).some(
+        (split) => text.slice(0, split).repeat(text.length / split) === text,
+      );
+    })
+    .reduce((sum, num) => sum + num, 0);
 }
 
 console.log("Part 1:", part1(input));
