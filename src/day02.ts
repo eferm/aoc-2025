@@ -2,17 +2,18 @@ import { readFileSync } from "fs";
 
 const input = readFileSync("inputs/day02.txt", "utf-8").trim();
 
+function range(start: number, stop: number): number[] {
+  return Array.from({ length: stop - start + 1 }, (_, i) => start + i);
+}
+
 function part1(input: string) {
   return input
     .split(",")
     .map((range) => range.split("-").map(Number) as [number, number])
-    .flatMap(([first, last]) => {
-      return Array.from({ length: last - first + 1 }, (_, i) => first + i);
-    })
+    .flatMap(([first, last]) => range(first, last))
     .filter((i) => {
-      const text = String(i);
-      const mid = Math.floor(text.length / 2);
-      return text.slice(0, mid).repeat(2) === text;
+      const s = String(i);
+      return s.slice(0, s.length / 2).repeat(2) === s;
     })
     .reduce((sum, num) => sum + num, 0);
 }
@@ -21,13 +22,11 @@ function part2(input: string) {
   return input
     .split(",")
     .map((range) => range.split("-").map(Number) as [number, number])
-    .flatMap(([first, last]) => {
-      return Array.from({ length: last - first + 1 }, (_, i) => first + i);
-    })
+    .flatMap(([first, last]) => range(first, last))
     .filter((i) => {
-      const text = String(i);
-      return Array.from({ length: text.length / 2 }, (_, i) => 1 + i).some(
-        (split) => text.slice(0, split).repeat(text.length / split) === text,
+      const s = String(i);
+      return range(1, s.length / 2).some(
+        (end) => s.slice(0, end).repeat(s.length / end) === s,
       );
     })
     .reduce((sum, num) => sum + num, 0);
