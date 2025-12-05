@@ -22,7 +22,20 @@ function part1(input: string) {
 }
 
 function part2(input: string) {
-  return 0;
+  return input
+    .split("\n")
+    .map((bank) => Array.from(bank).map(Number))
+    .map((bank) => {
+      const arr = [];
+      let i = 0;
+      for (let n = 0; n < 12; n++) {
+        const max = Math.max(...bank.slice(i, bank.length - (12 - n) + 1));
+        arr.push(max);
+        i = bank.indexOf(max, i) + 1;
+      }
+      return Number(arr.join(""));
+    })
+    .reduce((sum, num) => sum + num, 0);
 }
 
 console.log("Part 1:", part1(input));
