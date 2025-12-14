@@ -5,11 +5,12 @@ const input = readFileSync("inputs/day04.txt", "utf-8").trim();
 function update(grid: string[][]): string[][] {
   return grid.map((row, r) =>
     row.map((val, c) => {
-      const adj = grid
+      // Get submatrix around (r, c) and count total @s
+      const box = grid
         .slice(Math.max(r - 1, 0), r + 2)
         .flatMap((row) => row.slice(Math.max(c - 1, 0), c + 2))
         .filter((x) => x === "@").length;
-      return val === "@" && adj <= 4 ? "x" : val;
+      return val === "@" && box <= 4 ? "x" : val;
     }),
   );
 }
