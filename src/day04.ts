@@ -1,32 +1,15 @@
 import { readFileSync } from "fs";
 
 const input = readFileSync("inputs/day04.txt", "utf-8").trim();
-// const input = `
-// ..@@.@@@@.
-// @@@.@.@.@@
-// @@@@@.@.@@
-// @.@@@@..@.
-// @@.@@@@.@@
-// .@@@@@@@.@
-// .@.@.@.@@@
-// @.@@@.@@@@
-// .@@@@@@@@.
-// @.@.@@@.@.
-// `.trim();
-// console.log(input);
 
 function update(grid: string[][]): string[][] {
   return grid.map((row, r) =>
     row.map((val, c) => {
-      if (val === "@") {
-        return grid
-          .slice(Math.max(r - 1, 0), r + 2)
-          .flatMap((row) => row.slice(Math.max(c - 1, 0), c + 2))
-          .filter((x) => x === "@").length <= 4
-          ? "x"
-          : val;
-      }
-      return val;
+      const adj = grid
+        .slice(Math.max(r - 1, 0), r + 2)
+        .flatMap((row) => row.slice(Math.max(c - 1, 0), c + 2))
+        .filter((x) => x === "@").length;
+      return val === "@" && adj <= 4 ? "x" : val;
     }),
   );
 }
