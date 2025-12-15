@@ -13,7 +13,6 @@ const input = readFileSync("inputs/day05.txt", "utf-8").trim();
 // 11
 // 17
 // 32`.trim();
-
 // console.log(input, "\n--");
 
 function part1(input: string): number {
@@ -27,7 +26,20 @@ function part1(input: string): number {
 }
 
 function part2(input: string): number {
-  return 0;
+  return input
+    .split("\n\n")
+    .at(0)!
+    .split("\n")
+    .map((range) => range.split("-").map(Number) as [number, number])
+    .sort(([a], [b]) => a - b)
+    .reduce(
+      ([sum, max], [from, to]) => {
+        const incr = Math.max(to - Math.max(from, max) + 1, 0);
+        return [sum + incr, Math.max(to + 1, max)];
+      },
+      [0, 0],
+    )
+    .at(0)!;
 }
 
 console.log("Part 1:", part1(input));
