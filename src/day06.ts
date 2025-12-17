@@ -26,11 +26,10 @@ function part2(input: string): number {
     .map((row) => row.join("").trim() || "|") // all empty col as delimiter
     .join(" ")
     .split("|")
-    .map((line) => line.trim().split(/ +/).map(Number));
+    .map((line) => line.trim().split(/ +/));
   const ops = rows.at(-1)!.filter((c) => c === "+" || c === "*");
   return ops.reduce((prev, op, i) => {
-    const num = nums.at(i)!.reduce(operator[op]);
-    return prev + num;
+    return prev + nums.at(i)!.map(Number).reduce(operator[op]);
   }, 0);
 }
 
