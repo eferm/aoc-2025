@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-const input = readFileSync("inputs/day06.txt", "utf-8").slice(0, -1);
+const input = readFileSync("inputs/day06.txt", "utf-8").trim();
 
 const operator = {
   "+": (a: number, b: number) => a + b,
