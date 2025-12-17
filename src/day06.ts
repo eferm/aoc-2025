@@ -9,48 +9,29 @@ const operator = {
 
 function part1(input: string): number {
   const rows = input.split("\n").map((row) => row.trim().split(/\s+/));
-  const [nums, ops] = [
-    rows.slice(0, -1).map((row) => row.map(Number)),
-    rows.at(-1) as ("+" | "*")[],
-  ];
-  return ops
-    .map((op, i) =>
-      nums
-        .map((row) => row.at(i)!) // get column
-        .reduce((sum, val) => operator[op](sum, val)),
-    )
-    .reduce((sum, val) => sum + val);
+  const [nums, ops] = [rows.slice(0, -1), rows.at(-1)! as ("+" | "*")[]];
+  return ops.reduce((prev, op, i) => {
+    return prev + nums.map((row) => Number(row.at(i))).reduce(operator[op]);
+  }, 0);
+}
+
+function transpose(matrix: any[][]) {
+  return matrix[0]?.map((_, i) => matrix.map((row) => row[i]));
 }
 
 function part2(input: string): number {
   const rows = input.split("\n").map((row) => row.split(""));
-  const [nums, ops] = [rows.slice(0, -1), rows.at(-1)!];
-  return (
-    ops
-      // create (operator, vertical number) tuples from columns
-      .map<["+" | "*" | null, number]>((char, i) => [
-        char === "+" || char === "*" ? char : null,
-        +nums
-          .map((row) => row.at(i)) // get i:th column
-          .flat()
-          .join(""),
-      ])
-      // restructure into (operator + list of numbers) tuples
-      .reduce(
-        (acc, [op, val]) => {
-          if (op === "+" || op === "*") {
-            acc.push([op, [val]]); // start a new group
-          } else if (val > 0) {
-            acc.at(-1)?.[1].push(val); // push into the last group's list
-          }
-          return acc;
-        },
-        [] as ["+" | "*", number[]][],
-      )
-      // apply operator onto list of numbers
-      .map(([op, vals]) => vals.reduce((sum, val) => operator[op](sum, val)))
-      .reduce((sum, val) => sum + val)
-  );
+  // transpose -> process rows top-down equiv to process cols left-right
+  const nums = transpose(rows.slice(0, -1))!
+    .map((row) => row.join("").trim() || "|") // all empty col as delimiter
+    .join(" ")
+    .split("|")
+    .map((line) => line.trim().split(/ +/).map(Number));
+  const ops = rows.at(-1)!.filter((c) => c === "+" || c === "*");
+  return ops.reduce((prev, op, i) => {
+    const num = nums.at(i)!.reduce(operator[op]);
+    return prev + num;
+  }, 0);
 }
 
 console.log("Part 1:", part1(input));
