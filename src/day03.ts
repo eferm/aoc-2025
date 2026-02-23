@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 
 const input = readFileSync("inputs/day03.txt", "utf-8").trim();
 
@@ -15,14 +15,16 @@ function part1(input: string) {
     .reduce((sum, num) => sum + num, 0);
 }
 
+const DISPLAY_SIZE = 12;
+
 function part2(input: string) {
   return input
     .split("\n")
     .map((bank) => Array.from(bank).map(Number))
     .map((bank) => {
       let i = 0;
-      return Array.from({ length: 12 }, (_, n) => {
-        const max = Math.max(...bank.slice(i, bank.length - (12 - n) + 1));
+      return Array.from({ length: DISPLAY_SIZE }, (_, n) => {
+        const max = Math.max(...bank.slice(i, bank.length - (DISPLAY_SIZE - n) + 1));
         i = bank.indexOf(max, i) + 1;
         return max;
       });

@@ -15,7 +15,7 @@ function part1(input: string): number {
   }, 0);
 }
 
-function transpose(matrix: any[][]) {
+function transpose<T>(matrix: T[][]): (T | undefined)[][] | undefined {
   return matrix[0]?.map((_, i) => matrix.map((row) => row[i]));
 }
 
