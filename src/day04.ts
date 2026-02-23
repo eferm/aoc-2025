@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 
 const input = readFileSync("inputs/day04.txt", "utf-8").trim();
 
